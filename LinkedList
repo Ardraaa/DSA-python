@@ -1,0 +1,122 @@
+class Node:
+    def __init__(self, data=None):
+        self.data = data
+        self.next = None
+
+class LinkedList:
+    def __init__(self):
+        self.head = None
+
+    def append(self, data):
+        """Append a new node with data at the end of the linked list."""
+        new_node = Node(data)
+        if not self.head:
+            self.head = new_node
+            return
+        last_node = self.head
+        while last_node.next:
+            last_node = last_node.next
+        last_node.next = new_node
+
+    def prepend(self, data):
+        """Prepend a new node with data at the beginning of the linked list."""
+        new_node = Node(data)
+        new_node.next = self.head
+        self.head = new_node
+
+    def insert_after(self, prev_node_data, data):
+        """Insert a new node with data after a node with prev_node_data."""
+        new_node = Node(data)
+        if not self.head:
+            print("Previous node is not in the list.")
+            return
+        current_node = self.head
+        while current_node:
+            if current_node.data == prev_node_data:
+                new_node.next = current_node.next
+                current_node.next = new_node
+                return
+            current_node = current_node.next
+        print(f"Previous node with data {prev_node_data} not found.")
+
+    def delete(self, data):
+        """Delete the node with the given data from the linked list."""
+        current_node = self.head
+        if current_node and current_node.data == data:
+            self.head = current_node.next
+            current_node = None
+            return
+        prev = None
+        while current_node and current_node.data != data:
+            prev = current_node
+            current_node = current_node.next
+        if current_node is None:
+            return
+        prev.next = current_node.next
+        current_node = None
+
+    def display(self):
+        """Display the linked list."""
+        current_node = self.head
+        while current_node:
+            print(current_node.data, end=" -> ")
+            current_node = current_node.next
+        print("None")
+
+    def search(self, data):
+        """Search for the node with the given data and return its index."""
+        current_node = self.head
+        index = 0
+        while current_node:
+            if current_node.data == data:
+                return index
+            current_node = current_node.next
+            index += 1
+        return -1
+
+if __name__ == "__main__":
+    ll = LinkedList()
+
+    while True:
+        # Display menu options
+        print("\nLinked List Operations:")
+        print("1. Append a node at the end")
+        print("2. Prepend a node at the beginning")
+        print("3. Insert a node after a specific node")
+        print("4. Delete a node")
+        print("5. Display the linked list")
+        print("6. Search for a node")
+        print("7. Exit")
+
+        # Get user choice
+        choice = input("Enter your choice (1-7): ")
+
+        # Perform operation based on user choice
+        if choice == '1':
+            data = input("Enter data to append: ")
+            ll.append(data)
+        elif choice == '2':
+            data = input("Enter data to prepend: ")
+            ll.prepend(data)
+        elif choice == '3':
+            prev_data = input("Enter data of node after which to insert: ")
+            new_data = input("Enter new data to insert: ")
+            ll.insert_after(prev_data, new_data)
+        elif choice == '4':
+            data = input("Enter data to delete: ")
+            ll.delete(data)
+        elif choice == '5':
+            print("Linked List:")
+            ll.display()
+        elif choice == '6':
+            data = input("Enter data to search: ")
+            index = ll.search(data)
+            if index != -1:
+                print(f"Data '{data}' found at index {index}.")
+            else:
+                print(f"Data '{data}' not found in the linked list.")
+        elif choice == '7':
+            print("Exiting...")
+            break
+        else:
+            print("Invalid choice. Please enter a number from 1 to 7.")
